@@ -1,0 +1,20 @@
+name: Block PRs stacked on dev
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+
+permissions:
+  pull-requests: read
+  contents: read
+
+jobs:
+  block-stacked-prs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block Stacked PRs
+        if: github.event.pull_request.stack != null
+        run: |
+          echo "::error::Stacked pull requests are not allowed."
+          exit 1
+        
